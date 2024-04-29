@@ -1,0 +1,4 @@
+char: Non Displayable
+int: 0
+float: 0.01f
+double: 0.01

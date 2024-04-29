@@ -1,0 +1,4 @@
+char: 'f'
+int: 102
+float: 102.0f
+double: 102.0

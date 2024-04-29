@@ -1,0 +1,4 @@
+char: 'c'
+int: 99
+float: 99.0f
+double: 99.0

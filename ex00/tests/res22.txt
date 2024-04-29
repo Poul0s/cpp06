@@ -1,0 +1,4 @@
+char: impossible
+int: -214
+float: -214.0f
+double: -214.0

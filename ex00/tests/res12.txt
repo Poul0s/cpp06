@@ -1,0 +1,4 @@
+char: '.'
+int: 46
+float: 46.0f
+double: 46.0
