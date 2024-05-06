@@ -44,5 +44,7 @@ jobs:
       run: sudo apt install valgrind -y
     - name: compilation of ex02
       run: make -C ./ex02
+    - name: run tests ex02 without args
+      run: valgrind  --leak-check=full --track-fds=yes --error-exitcode=1 ./ex02/identifier
     - name: run tests ex02
-      run: valgrind  --leak-check=full --track-fds=yes --error-exitcode=1 ./ex02/Bureaucrat
+      run: valgrind  --leak-check=full --track-fds=yes --error-exitcode=1 ./ex02/identifier A B C fdsjkl
