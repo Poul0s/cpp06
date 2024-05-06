@@ -6,7 +6,7 @@
 /*   By: psalame <psalame@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:05:17 by psalame           #+#    #+#             */
-/*   Updated: 2024/05/06 16:19:59 by psalame          ###   ########.fr       */
+/*   Updated: 2024/05/06 16:23:21 by psalame          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char **av)
 	}
 	else
 	{
-		int	res;
+		int	res = 0;
 		for (int i = 1; i < ac; i++)
 		{
 			std::string	className = av[i];
