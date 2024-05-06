@@ -32,7 +32,7 @@ jobs:
     - name: compilation of ex01
       run: make -C ./ex01
     - name: run tests ex01
-      run: valgrind  --leak-check=full --track-fds=yes --error-exitcode=1 ./ex01/Bureaucrat
+      run: valgrind  --leak-check=full --track-fds=yes --error-exitcode=1 ./ex01/serializer
 
   ex02:
 
