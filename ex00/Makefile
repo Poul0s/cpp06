@@ -1,9 +1,10 @@
 CC	=	c++
 
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 
-SRC		=	Bureaucrat.cpp \
-			main.cpp \
+SRC		=	main.cpp			\
+			ScalarConvertor.cpp	\
+			scalarTester.cpp	\
 
 OBJ		=	$(addprefix obj/, $(SRC:.cpp=.o))
 
@@ -11,7 +12,7 @@ OBJ_DIR	=	$(sort $(dir $(OBJ)))
 
 HEADER	=	-I.
 
-NAME	=	Bureaucrat
+NAME	=	scalarConvert
 
 all: $(NAME)
 

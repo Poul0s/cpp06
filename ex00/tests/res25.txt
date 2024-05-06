@@ -1,4 +1,4 @@
-char: Non Displayable
+char: Non displayable
 int: 1
 float: 1.0f
 double: 1.0

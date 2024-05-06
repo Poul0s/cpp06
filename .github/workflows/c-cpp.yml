@@ -19,7 +19,7 @@ jobs:
     - name: compilation of ex00
       run: make -C ./ex00
     - name: run tests ex00
-      run: valgrind --leak-check=full --track-fds=yes ./ex00/Bureaucrat
+      run: valgrind --leak-check=full --track-fds=yes ./ex00/scalarConvert
 
   ex01:
 

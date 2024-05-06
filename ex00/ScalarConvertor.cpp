@@ -6,7 +6,7 @@
 /*   By: psalame <psalame@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 22:27:52 by psalame           #+#    #+#             */
-/*   Updated: 2024/04/28 01:16:20 by psalame          ###   ########.fr       */
+/*   Updated: 2024/05/06 14:44:03 by psalame          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <iostream>
 #include <sstream>
 #include <limits>
+#include <string>
+#include <cmath>
+#include <iomanip>
 
 ScalarConvertor::ScalarConvertor()
 {
@@ -39,11 +42,18 @@ static bool	isFloat(std::string &str)
 	if (str == "inff" || str == "+inff" || str == "-inff" || str == "nanf")
 		return (true);
 
+	if (str[str.size() - 1] == 'f')
+	{
+		if (str.find(".") == std::string::npos)
+			return (false);
+		str = str.substr(0, str.size() - 1);
+	}
+
 	std::istringstream	iss(str);
 	float				nb;
 
 	iss >> nb;
-	return (iss.eof() && !iss.fail());
+	return (iss.eof() && !iss.fail() && !iss.bad());
 }
 
 static bool	isInt(std::string &str)
@@ -57,53 +67,128 @@ static bool	isInt(std::string &str)
 
 static bool	isDouble(std::string &str)
 {
+	if (str == "inf" || str == "+inf" || str == "-inf" || str == "nan")
+		return (true);
 	std::istringstream	iss(str);
 	double 				nb;
 
 	iss >> nb;
-	return (iss.eof() && !iss.fail()); 
+	return (iss.eof() && !iss.fail() && !iss.bad()); 
 }
 
 static short	getStringType(std::string &str)
 {
 	if (str.size() == 0)
 		return (-1);
-	else if (str.size() == 1)
+	else if (str.size() == 1 && !isdigit(str[0]))
 		return (0);
-	else if (str[str.size() - 1] == 'f' && isFloat(str))
-		return (1);
-	else if (isInt(str))
-		return (2);
 	else if (isDouble(str))
 		return (3);
+	else if (str[str.size() - 1] == 'f' && isFloat(str))
+		return (2);
+	else if (isInt(str))
+		return (1);
 	return (-1);
 }
 
-static void	convertFromChar(std::string &str)
+static void	convertFromChar(std::string &str, std::ostream &os)
 {
 	char	c = str[0];
 
-	std::cout << "char: '" << c << "'" << std::endl;
-	std::cout << "int: " << static_cast<int>(c) << std::endl;
-	std::cout << "float: " << static_cast<float>(c) << ".0f" << std::endl;
-	std::cout << "double: " << static_cast<double>(c) << ".0" << std::endl;
+	os << "char: '" << c << "'" << std::endl;
+	os << "int: " << static_cast<int>(c) << std::endl;
+	os << "float: " << static_cast<float>(c) << ".0f" << std::endl;
+	os << "double: " << static_cast<double>(c) << ".0" << std::endl;
 }
 
-static void	convertFromInt(std::string &str)
+static void	convertFromInt(std::string &str, std::ostream &os)
 {
-	int		nb = std::stoi(str);
+	int					nb;
+	std::istringstream	iss(str);
+	iss >> nb;
 
 	if (nb < std::numeric_limits<char>::min() || nb > std::numeric_limits<char>::max())
-		std::cout << "char: impossible" << std::endl;
+		os << "char: impossible" << std::endl;
 	else if (nb < 32 || nb > 126)
-		std::cout << "char: Non displayable" << std::endl;
+		os << "char: Non displayable" << std::endl;
 	else
-		std::cout << "char: '" << static_cast<char>(nb) << "'" << std::endl;
-	std::cout << "int: " << nb << std::endl;
-	
+		os << "char: '" << static_cast<char>(nb) << "'" << std::endl;
+	os << "int: " << nb << std::endl;
+	os << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(nb) << "f" << std::endl;
+	os << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(nb) << std::endl;
 }
 
-void ScalarConvertor::convert(std::string &str)
+static void	convertFromFloat(std::string &str, std::ostream &os)
+{
+	float				nb;
+	if (str == "inff" || str == "+inff")
+		nb = std::numeric_limits<float>::infinity();
+	else if (str == "-inff")
+		nb = -std::numeric_limits<float>::infinity();
+	else if (str == "nanf")
+		nb = std::numeric_limits<float>::quiet_NaN();
+	else
+	{
+		std::istringstream	iss(str);
+		iss >> nb;
+	}
+
+
+	if (std::isnan(nb) || nb < std::numeric_limits<char>::min() || nb > std::numeric_limits<char>::max())
+		os << "char: impossible" << std::endl;
+	else if (nb < 32 || nb > 126)
+		os << "char: Non displayable" << std::endl;
+	else
+		os << "char: '" << static_cast<char>(nb) << "'" << std::endl;
+	
+	if (std::isnan(nb) || nb < std::numeric_limits<int>::min() || nb > std::numeric_limits<int>::max())
+		os << "int: impossible" << std::endl;
+	else
+		os << "int: " << static_cast<int>(nb) << std::endl;
+	
+	os << "float: " << std::fixed << std::setprecision(1) << nb << "f" << std::endl;
+	
+	os << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(nb) << std::endl;
+}
+
+static void	convertFromDouble(std::string &str, std::ostream &os)
+{
+	double				nb;
+	if (str == "inf" || str == "+inf")
+		nb = std::numeric_limits<double>::infinity();
+	else if (str == "-inf")
+		nb = -std::numeric_limits<double>::infinity();
+	else if (str == "nan")
+		nb = std::numeric_limits<double>::quiet_NaN();
+	else
+	{
+		std::istringstream	iss(str);
+		iss >> nb;
+	}
+
+	if (std::isnan(nb) || nb < std::numeric_limits<char>::min() || nb > std::numeric_limits<char>::max())
+		os << "char: impossible" << std::endl;
+	else if (nb < 32 || nb > 126)
+		os << "char: Non displayable" << std::endl;
+	else
+		os << "char: '" << static_cast<char>(nb) << "'" << std::endl;
+	
+	if (std::isnan(nb) || nb < std::numeric_limits<int>::min() || nb > std::numeric_limits<int>::max())
+		os << "int: impossible" << std::endl;
+	else
+		os << "int: " << static_cast<int>(nb) << std::endl;
+	
+	os << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(nb) << "f" << std::endl; // todo look setprecision
+
+	os << "double: " << std::fixed << std::setprecision(1) << nb << std::endl;
+}
+
+void	ScalarConvertor::convert(std::string &str)
+{
+	ScalarConvertor::convert(str, std::cout);
+}
+
+void	ScalarConvertor::convert(std::string &str, std::ostream &os)
 {
 	short	type;
 
@@ -111,7 +196,19 @@ void ScalarConvertor::convert(std::string &str)
 	switch (type)
 	{
 		case 0:
-			std::cout << "char: impossible" << std::endl
+			convertFromChar(str, os);
+			break;
+		case 1:
+			convertFromInt(str, os);
+			break;
+		case 2:
+			convertFromFloat(str, os);
+			break;
+		case 3:
+			convertFromDouble(str, os);
+			break;
+		default:
+			os << "char: impossible" << std::endl
 			<< "int: impossible" << std::endl
 			<< "float: impossible" << std::endl
 			<< "double: impossible" << std::endl;
