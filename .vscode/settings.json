@@ -1,5 +1,6 @@
 {
 	"files.associations": {
+		"*.tpp": "cpp",
 		"array": "cpp",
 		"atomic": "cpp",
 		"bit": "cpp",
@@ -44,6 +45,7 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
-		"sstream": "cpp"
+		"sstream": "cpp",
+		"iomanip": "cpp"
 	}
 }

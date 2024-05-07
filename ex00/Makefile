@@ -4,7 +4,6 @@ CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 
 SRC		=	main.cpp			\
 			ScalarConvertor.cpp	\
-			scalarTester.cpp	\
 
 OBJ		=	$(addprefix obj/, $(SRC:.cpp=.o))
 
@@ -27,6 +26,7 @@ $(OBJ_DIR):
 
 clean:
 	rm -rf obj/
+	rm -rf tests/output_*.txt
 
 fclean: clean
 	rm -rf $(NAME)
@@ -34,6 +34,6 @@ fclean: clean
 re: fclean all
 
 test: all
-	./$(NAME)
+	cd tests && ./tester.sh
 
 .PHONY: all clean fclean re
