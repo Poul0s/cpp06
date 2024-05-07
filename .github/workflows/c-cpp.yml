@@ -19,7 +19,7 @@ jobs:
     - name: compilation of ex00
       run: make -C ./ex00
     - name: run tests ex00
-      run: make test
+      run: make -C ./ex00 test
 
   ex01:
 
